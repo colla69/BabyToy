@@ -1,0 +1,93 @@
+{
+  "steward": "10cdc34dc284",
+  "files": {
+    ".claude/agents/change-plan.md": {
+      "from": "roles/plan.md",
+      "template": "d6bb237d4e0809e690ea94224a4f5f4369ca91a78a6fa0747bb9e405b9172854",
+      "fill": {
+        "TASK": "change",
+        "WHAT_THE_TASK_DOES": "a feature or a fix",
+        "skills": [
+          "craft-development:development-standards",
+          "universal-clean-code:clean-code",
+          "language-swift:swift-conventions",
+          "language-simple-english:simple-english"
+        ],
+        "model": "opus",
+        "effort": "high"
+      },
+      "sha256": "b0c6488997a223db7746c1ebae33ef446f1f92b09a61c3b4165f4bc62bc29452"
+    },
+    ".claude/agents/change-do.md": {
+      "from": "roles/do.md",
+      "template": "b5074e2cca99bf009a17461d841ad31be25da3b6476f59e235492fd71debe7ee",
+      "fill": {
+        "TASK": "change",
+        "WHAT_THE_TASK_DOES": "a feature or a fix",
+        "skills": [
+          "universal-work-discipline:work-discipline",
+          "craft-development:development-standards",
+          "craft-unit-testing:write-unit-tests",
+          "universal-clean-code:clean-code",
+          "language-swift:swift-conventions",
+          "tools-appkit:appkit-conventions",
+          "language-simple-english:simple-english"
+        ],
+        "model": "opus",
+        "effort": "medium"
+      },
+      "sha256": "d7f346af2a0e08991d6b26e76d9a7f8cfb0e86a53207f9bc5af2027c69129905"
+    },
+    ".claude/agents/change-check.md": {
+      "from": "roles/check.md",
+      "template": "fd060222292452794ad4cd8b62d826bf9e253d7e9b307396139046e63c9739cd",
+      "fill": {
+        "TASK": "change",
+        "WHAT_THE_TASK_DOES": "a feature or a fix",
+        "skills": [
+          "craft-review:review-work",
+          "craft-code-review:review-changes",
+          "universal-clean-code:clean-code",
+          "language-swift:swift-conventions",
+          "language-simple-english:simple-english"
+        ],
+        "model": "opus",
+        "effort": "medium"
+      },
+      "sha256": "d050a59ba0dfe3b0d2ad68c7c76c7576f3e36ae52d16e8e245f55ec51a954e26"
+    },
+    ".claude/skills/change/SKILL.md": {
+      "from": "roles/run.md",
+      "template": "719e9c44d8b8dd90cd15349d16bdfe4001fb26b03536adf84403df1c10d65352",
+      "fill": {
+        "TASK": "change",
+        "WHAT_THE_TASK_DOES": "a feature or a fix",
+        "THE_PHRASES_PEOPLE_USE_FOR_THIS_TASK": "add, build, change or fix something in the software, such as a new visual effect or a reaction to a key",
+        "THE_NON_OBVIOUS_SECOND_TRIGGER": "when the user describes something that looks or behaves wrong, without saying \"fix\""
+      },
+      "sha256": "caa0c7f2d4d7b444d12cf9bacc6c0ff2d4f66fc2cf07bb70770483bc2f28d9fb"
+    },
+    "CLAUDE.md": {
+      "sha256": "0197d55d34af3d716fd49bbf12a91b6acccb034a878206f4bddb1ba0fcc970f8"
+    },
+    ".claude/plugin-sources.json": {
+      "sha256": "351971ec7becc5550b36fae49f98fee691fbceb58d200f5429fd63861e74e321"
+    },
+    ".claude/settings.json": {
+      "sha256": "f77209f330e0bcae5fd966704636198c47ff332216242bcbcc72e726adfc088d"
+    }
+  },
+  "plugins": [
+    "craft-development@personal-claude-plugin-marketplace",
+    "craft-code-review@personal-claude-plugin-marketplace",
+    "craft-refactoring@personal-claude-plugin-marketplace",
+    "craft-unit-testing@personal-claude-plugin-marketplace",
+    "universal-clean-code@personal-claude-plugin-marketplace",
+    "universal-work-discipline@personal-claude-plugin-marketplace",
+    "craft-review@personal-claude-plugin-marketplace",
+    "language-simple-english@personal-claude-plugin-marketplace",
+    "language-swift@personal-claude-plugin-marketplace",
+    "tools-appkit@personal-claude-plugin-marketplace",
+    "swift-lsp@claude-plugins-official"
+  ]
+}

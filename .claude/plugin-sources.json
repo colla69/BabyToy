@@ -1,0 +1,7 @@
+{
+  "priority": ["personal-claude-plugin-marketplace"],
+  "marketplaces": {
+    "personal-claude-plugin-marketplace": { "recommend": true },
+    "claude-plugins-official": { "recommend": true, "external": true }
+  }
+}
