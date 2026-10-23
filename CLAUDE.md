@@ -11,7 +11,7 @@ toddler; the adult is the one who starts and stops it.
   kiosk. No web page, no browser.
 - Swift Package Manager: `BabyToyCore` (library), `BabyToy` (executable) and
   `BabyToyCoreTests` (Swift Testing).
-- Drawing with Core Graphics and Core Text, rendered off the main thread. Sound with
+- Drawing with Core Graphics, rendered off the main thread. Sound with
   AVAudioEngine playing tones synthesised at start: no audio files.
 
 The plans are `docs/first-version-plan.md` (the stack and its reasons) and
@@ -33,7 +33,7 @@ The plans are `docs/first-version-plan.md` (the stack and its reasons) and
 
 | Path | Responsibility | Start here |
 |---|---|---|
-| `Sources/BabyToyCore/` | Pure logic, with no AppKit window and no audio: key map, exit matcher, routing of one key event, scene, renderer, tones | `KeyRouter.swift` |
+| `Sources/BabyToyCore/` | Pure logic, with no AppKit window and no audio: key map, the effect of a key or a pointer place (`Element.swift`), exit matcher, routing of one key event, pointer routing and its glide throttle (`PointerRouter.swift`), scene, particles (`Particles.swift`), renderer, tones | `KeyRouter.swift` |
 | `Sources/BabyToy/` | AppKit and AVFoundation glue: kiosk window, live view, sound player, snapshot mode | `AppDelegate.swift` |
 | `Tests/BabyToyCoreTests/` | Tests of the core | `ExitCombinationTests.swift` |
 

@@ -27,13 +27,13 @@ struct KeyboardLayoutTests {
     #expect(space.group == .bigKey)
   }
 
-  @Test("Letters and digits carry their label and group")
-  func lettersAndDigitsHaveLabels() {
+  @Test("Letters and digits carry their group")
+  func lettersAndDigitsHaveGroups() {
     let q = KeyboardLayout.key(for: 12)
     let one = KeyboardLayout.key(for: 18)
 
-    #expect(q.group == .letter && q.label == "Q")
-    #expect(one.group == .digit && one.label == "1")
+    #expect(q.group == .letter)
+    #expect(one.group == .digit)
   }
 
   @Test(

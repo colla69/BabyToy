@@ -4,6 +4,11 @@ import Testing
 
 private let allKeys = (UInt16(0)..<128).map { KeyboardLayout.key(for: $0) }
 
+private let glides = Tones.allTones.filter {
+  if case .glide = $0 { true } else { false }
+}
+private let keyTones = Tones.allTones.filter { !glides.contains($0) }
+
 private func peak(_ samples: [Float]) -> Float {
   samples.map(abs).max() ?? 0
 }
@@ -15,15 +20,34 @@ struct TonesTests {
     #expect(Tones.masterLevel == 0.25)
   }
 
-  @Test("Every tone peaks at most at masterLevel / 8, and is clearly audible")
+  @Test("Every key tone peaks at most at masterLevel / 8, and is clearly audible")
   func peakIsBounded() {
-    #expect(!Tones.allTones.isEmpty)
-    for tone in Tones.allTones {
+    #expect(!keyTones.isEmpty)
+    for tone in keyTones {
       let samples = Tones.samples(for: tone)
 
       #expect(peak(samples) <= Tones.masterLevel / 8, "\(tone)")
       #expect(peak(samples) > Tones.masterLevel / 16, "\(tone)")
     }
+  }
+
+  @Test("Every glide peaks above masterLevel / 32 and at most at masterLevel / 16")
+  func glidePeakIsBounded() {
+    #expect(glides.count == Tones.noteSteps)
+    for tone in glides {
+      let samples = Tones.samples(for: tone)
+
+      #expect(peak(samples) <= Tones.masterLevel / 16, "\(tone)")
+      #expect(peak(samples) > Tones.masterLevel / 32, "\(tone)")
+    }
+  }
+
+  @Test("7 key voices at peakLimit and 1 glide at its peak stay at or under masterLevel")
+  func voicesStayUnderMaster() {
+    let loudestGlide = glides.map { peak(Tones.samples(for: $0)) }.max() ?? .infinity
+
+    #expect(Tones.keyVoiceCount == 7)
+    #expect(Float(Tones.keyVoiceCount) * Tones.peakLimit + loudestGlide <= Tones.masterLevel)
   }
 
   @Test("Every tone starts and ends at about zero, so it does not click")

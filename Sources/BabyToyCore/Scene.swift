@@ -10,56 +10,36 @@ public struct RGBColor: Sendable, Equatable {
   }
 }
 
-public enum ReactionShape: Sendable, Equatable {
-  case circle
-  case star
-  case roundedSquare
-  case ring
+/// How big a reaction is: a key press or a click makes a burst, a moving pointer a trail.
+public enum ReactionStrength: Sendable, Equatable {
+  case burst
+  case trail
 }
 
-/// The visual answer to one key press.
+/// The visual answer to one key press, one click or one step of a moving pointer.
 public struct Reaction: Sendable, Equatable {
-  public let keyCode: UInt16
   /// 0 is the left edge of the screen, 1 the right edge.
   public let x: Double
   /// 0 is the top edge of the screen, 1 the bottom edge.
   public let y: Double
-  public let shape: ReactionShape
-  public let color: RGBColor
-  public let label: Character?
+  public let element: Element
+  public let strength: ReactionStrength
+  /// Sets the details that differ between reactions of one element, such as the particle
+  /// directions and the colour of a drop.
+  public let seed: UInt64
   /// Seconds, on the same clock as the times passed to `Scene`.
   public let spawnTime: Double
 
   public init(
-    keyCode: UInt16, x: Double, y: Double, shape: ReactionShape, color: RGBColor,
-    label: Character?, spawnTime: Double
+    x: Double, y: Double, element: Element, strength: ReactionStrength, seed: UInt64,
+    spawnTime: Double
   ) {
-    self.keyCode = keyCode
     self.x = x
     self.y = y
-    self.shape = shape
-    self.color = color
-    self.label = label
+    self.element = element
+    self.strength = strength
+    self.seed = seed
     self.spawnTime = spawnTime
-  }
-
-  /// How far through its life the reaction is: 0 at spawn, 1 at the end.
-  private func progress(at time: Double) -> Double {
-    min(max((time - spawnTime) / Scene.lifetime, 0), 1)
-  }
-
-  /// Size relative to the base size. It grows fast at first, then slows down.
-  public func scale(at time: Double) -> Double {
-    let remaining = 1 - progress(at: time)
-    return 0.5 + 0.8 * (1 - remaining * remaining * remaining)
-  }
-
-  /// 1 is fully visible, 0 is gone. It stays bright for the first third of its life, then
-  /// fades out smoothly.
-  public func opacity(at time: Double) -> Double {
-    let fadeStart = 0.3
-    let fade = min(max((progress(at: time) - fadeStart) / (1 - fadeStart), 0), 1)
-    return 1 - fade * fade * (3 - 2 * fade)
   }
 }
 
@@ -72,18 +52,6 @@ public struct Scene: Sendable {
   /// How far a reaction may land from its key, as a fraction of the screen.
   private static let jitter = 0.03
 
-  /// Bright colours that read well on the dark background.
-  private static let palette: [RGBColor] = [
-    RGBColor(red: 1.00, green: 0.36, blue: 0.36),
-    RGBColor(red: 1.00, green: 0.66, blue: 0.20),
-    RGBColor(red: 1.00, green: 0.90, blue: 0.25),
-    RGBColor(red: 0.45, green: 0.90, blue: 0.35),
-    RGBColor(red: 0.25, green: 0.85, blue: 0.85),
-    RGBColor(red: 0.35, green: 0.60, blue: 1.00),
-    RGBColor(red: 0.70, green: 0.45, blue: 1.00),
-    RGBColor(red: 1.00, green: 0.45, blue: 0.80),
-  ]
-
   /// Oldest first.
   public private(set) var reactions: [Reaction] = []
   private var random: SeededRandom
@@ -92,20 +60,23 @@ public struct Scene: Sendable {
     random = SeededRandom(seed: seed)
   }
 
+  /// A key press. The effect comes from the key's place in the key map, and the reaction
+  /// lands within a little jitter of that place.
   public mutating func press(keyCode: UInt16, at time: Double) {
     let key = KeyboardLayout.key(for: keyCode)
-    let reaction = Reaction(
-      keyCode: keyCode,
-      x: jittered(key.x),
-      y: jittered(key.y),
-      shape: Self.shape(for: key.group),
-      color: Self.palette.randomElement(using: &random) ?? Self.palette[0],
-      label: key.label,
-      spawnTime: time)
-    reactions.append(reaction)
-    if reactions.count > Self.maxReactions {
-      reactions.removeFirst(reactions.count - Self.maxReactions)
-    }
+    let x = jittered(key.x)
+    let y = jittered(key.y)
+    add(x: x, y: y, element: Element.forKey(key), strength: .burst, at: time)
+  }
+
+  /// A click at the pointer's place, given as 0…1 with y = 0 at the top.
+  public mutating func burst(x: Double, y: Double, at time: Double) {
+    add(x: x, y: y, element: Element.at(x: x, y: y), strength: .burst, at: time)
+  }
+
+  /// One step of a moving pointer, at its place.
+  public mutating func trail(x: Double, y: Double, at time: Double) {
+    add(x: x, y: y, element: Element.at(x: x, y: y), strength: .trail, at: time)
   }
 
   /// Removes the reactions that are at or past the end of their lifetime.
@@ -113,17 +84,19 @@ public struct Scene: Sendable {
     reactions.removeAll { time - $0.spawnTime >= Self.lifetime }
   }
 
+  private mutating func add(
+    x: Double, y: Double, element: Element, strength: ReactionStrength, at time: Double
+  ) {
+    let reaction = Reaction(
+      x: x, y: y, element: element, strength: strength, seed: random.next(), spawnTime: time)
+    reactions.append(reaction)
+    if reactions.count > Self.maxReactions {
+      reactions.removeFirst(reactions.count - Self.maxReactions)
+    }
+  }
+
   private mutating func jittered(_ value: Double) -> Double {
     let offset = Double.random(in: -Self.jitter...Self.jitter, using: &random)
     return min(max(value + offset, 0), 1)
-  }
-
-  private static func shape(for group: KeyGroup) -> ReactionShape {
-    switch group {
-    case .letter: .circle
-    case .digit: .star
-    case .bigKey: .roundedSquare
-    case .other: .ring
-    }
   }
 }

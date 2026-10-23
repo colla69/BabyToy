@@ -1,7 +1,8 @@
 # BabyToy
 
-A fullscreen toy for a small child on your lap. Every key press shows a bright shape and
-plays a soft tone. Mashing the keys cannot close the toy or switch to another app.
+A fullscreen toy for a small child on your lap. Keys and the mouse make fire, water,
+explosions and drops, with a soft tone. Mashing the keys cannot close the toy or switch to
+another app.
 
 CAUTION: Never use headphones with this toy. The child cannot judge the volume, and the
 volume keys are not blocked.
@@ -27,13 +28,13 @@ make run
 
 `make run` starts the toy with no time limit. Only the exit combination closes it.
 
-If the keys do not make shapes, the toy did not get the keyboard. With `make try`, wait 60
+If the keys make nothing on the screen, the toy did not get the keyboard. With `make try`, wait 60
 seconds, and the toy closes.
 
 ## Leave the toy
 
 1. Hold Control, Option and Command. Hold no other key.
-2. While you hold them, press B, then Y, then E. Press each letter once, one at a time.
+2. While you hold them, press B, then Y, then E. Press each key once, one at a time.
 
 The toy closes after E. Caps Lock on or off does not matter.
 
@@ -54,13 +55,14 @@ the toy first.
 
 ## Boundary checklist
 
-Do this check once, with `make try`, before the child uses the toy. It takes about 3
-minutes. Press each key or combination. Write down what happens if it is not what the table
-expects.
+Do this check once before the child uses the toy. It takes about 3 minutes. Use `make try`
+until the exit combination has worked once. Do the checklist with `make run`, and leave
+with the exit combination. Press each key or combination. Write down what happens if it is
+not what the table expects.
 
-"Expected: visuals and sound only" means that the key makes a shape and a tone, and nothing
-else happens. "Known gap" means that the toy cannot block the key. The key does what it
-does in macOS.
+"Expected: visuals and sound only" means that the key makes fire, water, an explosion or a
+drop, and a tone, and nothing else happens. "Known gap" means that the toy cannot block the
+key. The key does what it does in macOS.
 
 CAUTION: Do not press Control + Option + Command + Power. It quits all apps and shuts the
 Mac down.
@@ -125,4 +127,4 @@ Mac down.
 | Lock screen (Control+Cmd+Q) | known gap. Unsure: write down whether it locks. |
 | Trackpad swipe between Spaces (three or four fingers) | known gap. Unsure: write down whether the toy stays on screen. |
 | Move the pointer into a hot corner | known gap. Unsure: the option that turns hot corners off needs macOS 27, and this Mac runs 26.7.1. |
-| Control+Option+Command with any letter other than B, Y, E | known gap. Unsure: write down any letter that runs a system shortcut. |
+| Control+Option+Command with any key other than B, Y, E | known gap. Unsure: write down any key that runs a system shortcut. |
