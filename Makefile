@@ -1,4 +1,10 @@
-.PHONY: test lint snapshot
+.PHONY: run try test lint snapshot
+
+run:
+	swift run BabyToy
+
+try:
+	swift run BabyToy --exit-after 60
 
 test:
 	swift test
