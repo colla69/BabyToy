@@ -2,7 +2,7 @@
 name: change-do
 description: Carries out an accepted plan for a feature or a fix in this project. The only agent of `/change` that changes files. Invoked with a plan the user has accepted.
 effort: medium
-model: opus
+model: sonnet
 skills:
   - universal-work-discipline:work-discipline
   - craft-development:development-standards

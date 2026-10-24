@@ -2,7 +2,7 @@
 name: change-check
 description: Checks the result of `/change` in this project against the plan the user accepted, item by item, and sends gaps back to Do. The last step of `/change`. Read-only.
 effort: medium
-model: opus
+model: sonnet
 disallowedTools: Write, Edit, NotebookEdit
 skills:
   - craft-review:review-work

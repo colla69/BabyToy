@@ -1,7 +1,7 @@
 ---
 name: change-plan
 description: Plans a feature or a fix in this project. Reads, asks, and proposes a plan, then stops for the user's OK. The first step of `/change`. Read-only.
-effort: high
+effort: medium
 model: opus
 disallowedTools: Write, Edit, NotebookEdit
 skills:

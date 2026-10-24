@@ -1,5 +1,5 @@
 {
-  "steward": "10cdc34dc284",
+  "steward": "6600cabf47ec",
   "files": {
     ".claude/agents/change-plan.md": {
       "from": "roles/plan.md",
@@ -51,10 +51,10 @@
           "language-swift:swift-conventions",
           "language-simple-english:simple-english"
         ],
-        "model": "opus",
+        "model": "sonnet",
         "effort": "medium"
       },
-      "sha256": "d050a59ba0dfe3b0d2ad68c7c76c7576f3e36ae52d16e8e245f55ec51a954e26"
+      "sha256": "42ea8650689fa1d8066df65dd91182e3175026b008adaa8b7de71fd86a6be8dd"
     },
     ".claude/skills/change/SKILL.md": {
       "from": "roles/run.md",
