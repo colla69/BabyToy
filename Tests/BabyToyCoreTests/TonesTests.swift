@@ -112,3 +112,37 @@ struct VoicePoolTests {
     #expect(indices[8] == 0)
   }
 }
+
+@Suite("Tone voices")
+struct ToneVoicesTests {
+  @Test("14 key tones take voices 0 to 6, twice, in turn")
+  func keyTonesTakeTurns() {
+    var voices = ToneVoices()
+    let tones: [Tone] = [.note(step: 0), .bell, .boom, .pluck, .note(step: 5), .bell, .boom]
+
+    let indices = (tones + tones).map { voices.voice(for: $0) }
+
+    #expect(indices == Array(0...6) + Array(0...6))
+  }
+
+  @Test("A glide always takes voice 7")
+  func glideTakesLastVoice() {
+    var voices = ToneVoices()
+
+    let indices = (0..<5).map { voices.voice(for: .glide(step: $0)) }
+
+    #expect(ToneVoices.count == 8)
+    #expect(indices == [7, 7, 7, 7, 7])
+  }
+
+  @Test("A glide between two notes does not move the key voices on")
+  func glideKeepsKeyRotation() {
+    var voices = ToneVoices()
+
+    let indices = [Tone.note(step: 1), .glide(step: 1), .note(step: 2)].map {
+      voices.voice(for: $0)
+    }
+
+    #expect(indices == [0, 7, 1])
+  }
+}

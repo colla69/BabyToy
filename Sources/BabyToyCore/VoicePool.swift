@@ -16,3 +16,25 @@ public struct VoicePool: Sendable {
     return index
   }
 }
+
+/// Chooses the player for each tone. Key tones take turns on the first
+/// `Tones.keyVoiceCount` voices, and a glide always has the last voice to itself, so a
+/// moving pointer never cuts off a key's sound.
+public struct ToneVoices: Sendable {
+  public static let count = Tones.keyVoiceCount + 1
+
+  private static let glideVoice = Tones.keyVoiceCount
+
+  private var keyVoices = VoicePool(size: Tones.keyVoiceCount)
+
+  public init() {}
+
+  public mutating func voice(for tone: Tone) -> Int {
+    switch tone {
+    case .glide:
+      Self.glideVoice
+    case .note, .bell, .boom, .pluck:
+      keyVoices.nextIndex()
+    }
+  }
+}

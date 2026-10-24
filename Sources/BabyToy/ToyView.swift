@@ -33,6 +33,10 @@ final class ToyView: NSView {
     scene.press(keyCode: keyCode, at: now)
   }
 
+  func show(_ response: PointerResponse) {
+    scene.apply(response, at: now)
+  }
+
   override func viewDidMoveToWindow() {
     super.viewDidMoveToWindow()
     guard window != nil, displayLink == nil else {

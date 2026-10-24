@@ -32,6 +32,11 @@ public enum KeyboardLayout {
     return fallbackKey(for: code)
   }
 
+  /// `true` if the code has a place of its own, `false` if it gets a fallback place.
+  static func isMapped(_ code: UInt16) -> Bool {
+    keysByCode[code] != nil
+  }
+
   private struct PhysicalKey {
     let code: UInt16
     let width: Double
@@ -90,6 +95,13 @@ public enum KeyboardLayout {
   private static let upArrow: UInt16 = 126
   private static let downArrow: UInt16 = 125
 
+  /// Top-row keys that send a code of their own instead of their F-key's code, mapped to that
+  /// F-key: brightness down and up (F1, F2), Mission Control (F3), Spotlight (F4), dictation
+  /// (F5) and Do Not Disturb (F6).
+  private static let topRowAliases: [UInt16: UInt16] = [
+    145: 122, 144: 120, 160: 99, 177: 118, 176: 96, 178: 97,
+  ]
+
   private static let keysByCode: [UInt16: KeyInfo] = {
     var keys: [UInt16: KeyInfo] = [:]
     let lastRow = Double(rows.count - 1)
@@ -109,6 +121,9 @@ public enum KeyboardLayout {
       keys[upArrow] = KeyInfo(
         x: down.x, y: down.y - 0.5 / lastRow, group: .other, row: down.row - 1,
         column: down.column)
+    }
+    for (alias, functionKey) in topRowAliases {
+      keys[alias] = keys[functionKey]
     }
     return keys
   }()

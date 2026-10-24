@@ -37,6 +37,18 @@ struct KeyboardLayoutTests {
   }
 
   @Test(
+    "A top-row key that sends its own code takes the place of its F-key",
+    arguments: [
+      (UInt16(145), UInt16(122)), (144, 120), (160, 99), (177, 118), (176, 96), (178, 97),
+    ])
+  func topRowAliasSharesPlace(alias: UInt16, functionKey: UInt16) {
+    let aliasKey = KeyboardLayout.key(for: alias)
+    let functionKeyInfo = KeyboardLayout.key(for: functionKey)
+
+    #expect(aliasKey.x == functionKeyInfo.x && aliasKey.y == functionKeyInfo.y)
+  }
+
+  @Test(
     "An unknown key code returns a position inside the keyboard",
     arguments: [
       UInt16(10), 52, 66, 200, 999, UInt16.max,

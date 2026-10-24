@@ -33,8 +33,8 @@ The plans are `docs/first-version-plan.md` (the stack and its reasons) and
 
 | Path | Responsibility | Start here |
 |---|---|---|
-| `Sources/BabyToyCore/` | Pure logic, with no AppKit window and no audio: key map, the effect of a key or a pointer place (`Element.swift`), exit matcher, routing of one key event, pointer routing and its glide throttle (`PointerRouter.swift`), scene, particles (`Particles.swift`), renderer, tones | `KeyRouter.swift` |
-| `Sources/BabyToy/` | AppKit and AVFoundation glue: kiosk window, live view, sound player, snapshot mode | `AppDelegate.swift` |
+| `Sources/BabyToyCore/` | Pure logic, with no AppKit window and no audio: key map, the effect of a key or a pointer place (`Element.swift`), exit matcher, routing of one key event, the event tap's decisions (`KeyTapPolicy.swift`), pointer routing and its glide throttle (`PointerRouter.swift`), scene, particles (`Particles.swift`), renderer, tones, voice choice (`VoicePool.swift`) | `KeyRouter.swift` |
+| `Sources/BabyToy/` | AppKit and AVFoundation glue: kiosk window, session event tap (`KeyTap.swift`), key and pointer monitors, live view, sound player, snapshot mode | `AppDelegate.swift` |
 | `Tests/BabyToyCoreTests/` | Tests of the core | `ExitCombinationTests.swift` |
 
 ## Conventions
@@ -56,6 +56,7 @@ The plans are `docs/first-version-plan.md` (the stack and its reasons) and
   window or an audio engine. Agents run it to see frames.
 - Agents never start the kiosk: not `make run`, not `make try`, not `swift run BabyToy`
   without `--snapshot`. It takes over the screen and the keyboard.
+- Agents never create an event tap and never change privacy permissions.
 - Agents never run `git`. The user commits.
 
 ## Trios

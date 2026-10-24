@@ -79,6 +79,18 @@ public struct Scene: Sendable {
     add(x: x, y: y, element: Element.at(x: x, y: y), strength: .trail, at: time)
   }
 
+  /// What a pointer event draws: the one rule that the app and snapshot mode share.
+  public mutating func apply(_ response: PointerResponse, at time: Double) {
+    switch response {
+    case .trail(let x, let y, _):
+      trail(x: x, y: y, at: time)
+    case .burst(let x, let y, _):
+      burst(x: x, y: y, at: time)
+    case .nothing:
+      break
+    }
+  }
+
   /// Removes the reactions that are at or past the end of their lifetime.
   public mutating func prune(at time: Double) {
     reactions.removeAll { time - $0.spawnTime >= Self.lifetime }

@@ -1,19 +1,20 @@
 import AVFoundation
 import BabyToyCore
 
-/// Plays the synthesised tones on a fixed pool of 8 voices. The loudness is the fixed
+/// Plays the synthesised tones on a fixed pool of 8 voices: 7 take turns for key tones, and
+/// 1 is for the glides of a moving pointer. The loudness is the fixed
 /// in-app level, `Tones.masterLevel`, which is already in the samples. It never reads or
 /// changes the system volume.
 ///
 /// Sound is extra: if the engine cannot run, the toy goes on without it.
 @MainActor
 final class SoundPlayer {
-  private static let voiceCount = 8
+  private static let voiceCount = ToneVoices.count
 
   private let engine = AVAudioEngine()
   private let players: [AVAudioPlayerNode]
   private let buffers: [Tone: AVAudioPCMBuffer]
-  private var voices = VoicePool(size: voiceCount)
+  private var voices = ToneVoices()
   private var configurationObserver: NSObjectProtocol?
 
   /// Returns `nil` if the tone buffers cannot be built. The toy then stays silent.
@@ -52,11 +53,14 @@ final class SoundPlayer {
   }
 
   func play(keyCode: UInt16) {
-    let tone = Tones.tone(for: KeyboardLayout.key(for: keyCode))
+    play(Tones.tone(for: KeyboardLayout.key(for: keyCode)))
+  }
+
+  func play(_ tone: Tone) {
     guard engine.isRunning, let buffer = buffers[tone] else {
       return
     }
-    let player = players[voices.nextIndex()]
+    let player = players[voices.voice(for: tone)]
     player.scheduleBuffer(buffer, at: nil, options: .interrupts, completionHandler: nil)
     if !player.isPlaying {
       player.play()

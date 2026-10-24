@@ -217,4 +217,17 @@ struct PointerRouterTests {
     #expect(xs.allSatisfy { built.contains(Tones.tone(forPointerX: $0)) })
     #expect(xs.allSatisfy { built.contains(Tones.glide(forPointerX: $0)) })
   }
+
+  @Test(
+    "A trail's tone is its glide, a trail without a glide has no tone, a burst's tone is its note, nothing has no tone"
+  )
+  func responseTone() {
+    let glide = Tones.glide(forPointerX: 0.4)
+    let note = Tones.tone(forPointerX: 0.6)
+
+    #expect(PointerResponse.trail(x: 0.4, y: 0.5, glide: glide).tone == glide)
+    #expect(PointerResponse.trail(x: 0.4, y: 0.5, glide: nil).tone == nil)
+    #expect(PointerResponse.burst(x: 0.6, y: 0.5, note: note).tone == note)
+    #expect(PointerResponse.nothing.tone == nil)
+  }
 }

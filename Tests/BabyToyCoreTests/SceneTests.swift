@@ -160,4 +160,40 @@ struct SceneTests {
     #expect(played(seed: 9) == played(seed: 9))
     #expect(played(seed: 9) != played(seed: 10))
   }
+
+  @Test("Applying a trail adds one trail reaction at its place")
+  func applyTrail() {
+    var scene = Scene()
+
+    scene.apply(.trail(x: 0.6, y: 0.1, glide: nil), at: 3)
+
+    #expect(scene.reactions.count == 1)
+    #expect(scene.reactions.first?.strength == .trail)
+    #expect(scene.reactions.first?.x == 0.6)
+    #expect(scene.reactions.first?.y == 0.1)
+    #expect(scene.reactions.first?.spawnTime == 3)
+  }
+
+  @Test("Applying a burst adds one burst reaction at its place, with the element for that place")
+  func applyBurst() {
+    var scene = Scene()
+
+    scene.apply(.burst(x: 0.95, y: 0.95, note: Tones.tone(forPointerX: 0.95)), at: 2)
+
+    #expect(scene.reactions.count == 1)
+    #expect(scene.reactions.first?.strength == .burst)
+    #expect(scene.reactions.first?.x == 0.95)
+    #expect(scene.reactions.first?.y == 0.95)
+    #expect(scene.reactions.first?.element == Element.at(x: 0.95, y: 0.95))
+    #expect(scene.reactions.first?.spawnTime == 2)
+  }
+
+  @Test("Applying nothing adds no reaction")
+  func applyNothing() {
+    var scene = Scene()
+
+    scene.apply(.nothing, at: 0)
+
+    #expect(scene.reactions.isEmpty)
+  }
 }

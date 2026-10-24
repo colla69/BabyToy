@@ -124,14 +124,10 @@ enum Snapshot {
       case .key(let code):
         scene.press(keyCode: code, at: scripted.time)
       case .pointer(let event):
-        switch router.route(event, at: scripted.time, screen: screen) {
-        case .trail(let x, let y, let glide):
-          scene.trail(x: x, y: y, at: scripted.time)
-          glides += glide == nil ? 0 : 1
-        case .burst(let x, let y, _):
-          scene.burst(x: x, y: y, at: scripted.time)
-        case .nothing:
-          break
+        let response = router.route(event, at: scripted.time, screen: screen)
+        scene.apply(response, at: scripted.time)
+        if case .glide = response.tone {
+          glides += 1
         }
       }
     }

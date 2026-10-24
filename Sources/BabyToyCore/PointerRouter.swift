@@ -18,6 +18,15 @@ public enum PointerResponse: Sendable, Equatable {
   /// Draw a burst at the place, and play `note`.
   case burst(x: Double, y: Double, note: Tone)
   case nothing
+
+  /// The sound to play with this response, if any.
+  public var tone: Tone? {
+    switch self {
+    case .trail(_, _, let glide): glide
+    case .burst(_, _, let note): note
+    case .nothing: nil
+    }
+  }
 }
 
 /// Moves a virtual pointer by the event deltas and decides what each event draws and plays.

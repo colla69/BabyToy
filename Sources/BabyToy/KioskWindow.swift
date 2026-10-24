@@ -7,6 +7,8 @@ final class KioskWindow: NSWindow {
       contentRect: screen.frame, styleMask: [.borderless], backing: .buffered, defer: false)
     isReleasedWhenClosed = false
     backgroundColor = .black
+    // Without this, AppKit sends no `.mouseMoved` events, and only drags would draw.
+    acceptsMouseMovedEvents = true
     setFrame(screen.frame, display: false)
   }
 
